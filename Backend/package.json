@@ -1,0 +1,24 @@
+{
+    "name": "scholarease",
+    "version": "1.0.0",
+    "description": "Scholarship guidance platform",
+    "main": "server.js",
+    "scripts": {
+        "start": "node server.js",
+        "dev": "node --watch server.js",
+        "share": "npx -y localtunnel --port 3000"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "bcryptjs": "^3.0.3",
+        "body-parser": "^1.20.2",
+        "cors": "^2.8.5",
+        "dotenv": "^17.2.3",
+        "express": "^4.18.2",
+        "jsonwebtoken": "^9.0.3",
+        "mongoose": "^9.1.5",
+        "nodemailer": "^7.0.12"
+    }
+}

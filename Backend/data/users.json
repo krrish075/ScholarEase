@@ -1,0 +1,19 @@
+[
+  {
+    "id": 1768735583887,
+    "name": "jaja",
+    "email": "jaja@gmail.com",
+    "password": "jaja123",
+    "profileCompleted": true,
+    "savedScholarships": [],
+    "category": "General",
+    "income": "1",
+    "state": "Maharashtra",
+    "gender": "Male",
+    "is_minority": false,
+    "is_pwd": false,
+    "cgpa": "9.8",
+    "year": "2nd Year",
+    "degree": "Engineering"
+  }
+]
