@@ -508,6 +508,7 @@ async function handleLogin() {
             localStorage.setItem('currentUser', JSON.stringify(user));
             updateUIForLogin(user);
             toggleLoginModal();
+            window.location.href = 'dashboard.html';
         } else {
             alert(data.message || "Invalid credentials!");
         }

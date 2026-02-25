@@ -4,197 +4,681 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard | ScholarEase Nexus</title>
-
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <title>My Dashboard | ScholarEase</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="css/style.css">
 
     <style>
-        .dashboard-container {
-            display: grid;
-            grid-template-columns: 320px 1fr;
-            gap: 30px;
-            align-items: start;
+        :root {
+            --bg: #0d0d1a;
+            --surface: rgba(255,255,255,0.04);
+            --surface-hover: rgba(255,255,255,0.08);
+            --border: rgba(255,255,255,0.1);
+            --accent: #8b5cf6;
+            --accent2: #3b82f6;
+            --accent-glow: rgba(139,92,246,0.35);
+            --green: #10b981;
+            --text: #f1f5f9;
+            --text-muted: rgba(241,245,249,0.55);
+            --radius: 18px;
+            --radius-sm: 10px;
+            --shadow: 0 8px 32px rgba(0,0,0,0.4);
+            --font: 'Inter', sans-serif;
         }
 
-        .profile-panel {
-            background: var(--sidebar-bg);
-            border: 1px solid var(--sidebar-border);
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            padding: 25px;
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: var(--font);
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            background-image:
+                radial-gradient(circle at 15% 10%, rgba(139,92,246,0.18) 0%, transparent 40%),
+                radial-gradient(circle at 85% 85%, rgba(59,130,246,0.15) 0%, transparent 40%),
+                radial-gradient(circle at 50% 50%, rgba(16,185,129,0.05) 0%, transparent 60%);
+        }
+
+        /* ---- NAVBAR ---- */
+        .navbar {
             position: sticky;
-            top: 100px;
+            top: 0;
+            z-index: 200;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 40px;
+            background: rgba(13,13,26,0.85);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
         }
-
-        .tab-btn-dash {
-            background: transparent;
-            border: none;
-            color: var(--text-color);
-            padding: 10px 20px;
-            font-size: 1.1em;
-            font-weight: 600;
+        .nav-logo {
+            font-size: 1.35rem;
+            font-weight: 800;
+            background: linear-gradient(to right, #a78bfa, #60a5fa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             cursor: pointer;
-            opacity: 0.6;
-            border-bottom: 2px solid transparent;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
         }
+        .nav-right { display: flex; align-items: center; gap: 12px; }
 
-        .tab-btn-dash.active {
-            opacity: 1;
-            border-bottom: 2px solid var(--accent-color);
-            color: var(--accent-color);
+        .nav-link {
+            padding: 8px 18px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.88rem;
+            cursor: pointer;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--text);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            transition: all 0.2s;
         }
+        .nav-link:hover { background: var(--surface-hover); transform: translateY(-1px); }
+        .nav-link.danger { border-color: rgba(239,68,68,0.4); color: #f87171; }
+        .nav-link.danger:hover { background: rgba(239,68,68,0.12); }
 
-        .dash-content {
-            background: rgba(30, 41, 59, 0.4);
-            border: 1px solid var(--glass-border);
+        /* ---- MAIN LAYOUT ---- */
+        .page-wrapper { max-width: 1200px; margin: 0 auto; padding: 40px 24px 80px; }
+
+        /* ---- PROFILE HERO CARD ---- */
+        .profile-hero {
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            align-items: center;
+            gap: 28px;
+            padding: 32px 36px;
+            background: linear-gradient(135deg, rgba(139,92,246,0.12), rgba(59,130,246,0.08));
+            border: 1px solid rgba(139,92,246,0.3);
             border-radius: var(--radius);
-            padding: 25px;
-            min-height: 500px;
+            margin-bottom: 36px;
+            position: relative;
+            overflow: hidden;
+        }
+        .profile-hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(139,92,246,0.06), transparent);
+            pointer-events: none;
+        }
+        .avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 800;
+            color: white;
+            flex-shrink: 0;
+            box-shadow: 0 0 20px var(--accent-glow);
+        }
+        .profile-info h2 { font-size: 1.6rem; font-weight: 700; margin-bottom: 4px; }
+        .profile-info .email { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 12px; }
+        .profile-badges { display: flex; flex-wrap: wrap; gap: 8px; }
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-size: 0.78rem;
+            font-weight: 600;
+        }
+        .badge-purple { background: rgba(139,92,246,0.18); color: #c4b5fd; border: 1px solid rgba(139,92,246,0.3); }
+        .badge-blue   { background: rgba(59,130,246,0.18); color: #93c5fd; border: 1px solid rgba(59,130,246,0.3); }
+        .badge-green  { background: rgba(16,185,129,0.18); color: #6ee7b7; border: 1px solid rgba(16,185,129,0.3); }
+        .badge-orange { background: rgba(251,146,60,0.18); color: #fcd34d; border: 1px solid rgba(251,146,60,0.3); }
+
+        .profile-hero-actions { display: flex; flex-direction: column; gap: 10px; align-items: flex-end; }
+        .profile-complete-pill {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            padding: 6px 14px;
+            border-radius: 30px;
+        }
+        .pill-complete { background: rgba(16,185,129,0.15); color: #6ee7b7; border: 1px solid rgba(16,185,129,0.3); }
+        .pill-incomplete { background: rgba(251,146,60,0.15); color: #fcd34d; border: 1px solid rgba(251,146,60,0.35); animation: pulse-border 2s infinite; }
+        @keyframes pulse-border { 0%,100%{ box-shadow: 0 0 0 0 rgba(251,146,60,0.4); } 50%{ box-shadow: 0 0 0 5px rgba(251,146,60,0); } }
+
+        /* ---- TABS ---- */
+        .tabs-nav {
+            display: flex;
+            gap: 4px;
+            padding: 5px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 50px;
+            width: fit-content;
+            margin-bottom: 32px;
+        }
+        .tab-pill {
+            padding: 9px 24px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            border: none;
+            color: var(--text-muted);
+            background: transparent;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+        .tab-pill:hover { color: var(--text); background: var(--surface-hover); }
+        .tab-pill.active {
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            color: white;
+            box-shadow: 0 4px 14px var(--accent-glow);
+        }
+        .tab-panel { display: none; }
+        .tab-panel.active { display: block; }
+
+        /* ---- PROFILE EDIT SECTION ---- */
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+        }
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .section-title i { color: var(--accent); }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 18px;
+            margin-bottom: 28px;
         }
 
-        @media (max-width: 900px) {
-            .dashboard-container {
-                grid-template-columns: 1fr;
-            }
+        .form-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            transition: border-color 0.2s;
+        }
+        .form-card:hover { border-color: rgba(139,92,246,0.35); }
+        .form-card label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.07em;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+        }
+        .form-card label i { margin-right: 6px; color: var(--accent); font-size: 0.85rem; }
 
-            .profile-panel {
-                position: static;
-            }
+        .form-input, .form-select {
+            width: 100%;
+            padding: 11px 14px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+            background: rgba(0,0,0,0.3);
+            color: var(--text);
+            font-family: var(--font);
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .form-input:focus, .form-select:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(139,92,246,0.2);
+        }
+        .form-input:disabled, .form-select:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .form-display {
+            font-size: 1rem;
+            font-weight: 600;
+            padding: 11px 0;
+            color: var(--text);
+        }
+        .form-display.empty { color: var(--text-muted); font-weight: 400; font-style: italic; }
+
+        .edit-actions { display: flex; gap: 12px; }
+        .btn {
+            padding: 11px 26px;
+            border-radius: 50px;
+            border: none;
+            font-weight: 700;
+            font-size: 0.92rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+        .btn-accent {
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            color: white;
+            box-shadow: 0 4px 15px var(--accent-glow);
+        }
+        .btn-accent:hover { transform: translateY(-2px); box-shadow: 0 8px 25px var(--accent-glow); }
+        .btn-ghost {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+        }
+        .btn-ghost:hover { background: var(--surface-hover); color: var(--text); }
+
+        /* ---- SCHOLARSHIP RECOMMENDATIONS ---- */
+        .rec-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+        }
+        .rec-meta {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .rec-meta .count-badge {
+            background: rgba(139,92,246,0.2);
+            color: #c4b5fd;
+            border-radius: 30px;
+            padding: 3px 10px;
+            font-weight: 700;
+            font-size: 0.85rem;
+        }
+
+        .match-label {
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 3px 9px;
+            border-radius: 20px;
+            background: rgba(16,185,129,0.15);
+            color: #6ee7b7;
+            border: 1px solid rgba(16,185,129,0.3);
+            position: absolute;
+            top: 16px;
+            right: 16px;
+        }
+
+        .rec-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .rec-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 24px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.25s;
+        }
+        .rec-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(139,92,246,0.5);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.3);
+        }
+        .rec-card .type-tag {
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            background: rgba(139,92,246,0.15);
+            color: #c4b5fd;
+            margin-bottom: 14px;
+            width: fit-content;
+        }
+        .rec-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 6px; line-height: 1.4; }
+        .rec-card .provider { font-size: 0.82rem; color: var(--text-muted); margin-bottom: 18px; }
+
+        .rec-info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            font-size: 0.85rem;
+        }
+        .rec-info-row:last-of-type { border-bottom: none; }
+        .rec-info-row .label { color: var(--text-muted); }
+        .rec-info-row .value { font-weight: 600; text-align: right; max-width: 60%; }
+        .value-green { color: #6ee7b7; }
+        .value-yellow { color: #fcd34d; }
+
+        .rec-card-footer { margin-top: 18px; }
+        .btn-view {
+            width: 100%;
+            padding: 10px;
+            border-radius: var(--radius-sm);
+            border: 1px solid rgba(139,92,246,0.4);
+            background: rgba(139,92,246,0.1);
+            color: #c4b5fd;
+            font-weight: 700;
+            font-size: 0.88rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+        .btn-view:hover { background: rgba(139,92,246,0.25); transform: translateY(-1px); }
+
+        /* Saved Tab */
+        .saved-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        /* Empty States */
+        .empty-state {
+            text-align: center;
+            padding: 64px 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 14px;
+        }
+        .empty-state .icon { font-size: 3rem; opacity: 0.3; }
+        .empty-state h3 { font-size: 1.1rem; font-weight: 700; opacity: 0.7; }
+        .empty-state p { font-size: 0.9rem; color: var(--text-muted); max-width: 340px; line-height: 1.6; }
+
+        /* Loading */
+        .loading-pulse {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            padding: 40px 0;
+        }
+        .spinner {
+            width: 20px; height: 20px;
+            border: 2px solid var(--border);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Toast */
+        #toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            padding: 14px 22px;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s;
+            z-index: 9999;
+            pointer-events: none;
+        }
+        #toast.show { opacity: 1; transform: translateY(0); }
+        #toast.success { background: rgba(16,185,129,0.2); border: 1px solid rgba(16,185,129,0.4); color: #6ee7b7; }
+        #toast.error   { background: rgba(239,68,68,0.2); border: 1px solid rgba(239,68,68,0.4); color: #fca5a5; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .navbar { padding: 12px 20px; }
+            .page-wrapper { padding: 24px 16px 60px; }
+            .profile-hero { grid-template-columns: auto 1fr; gap: 16px; padding: 22px; }
+            .profile-hero-actions { grid-column: 1 / -1; flex-direction: row; align-items: center; }
+            .tabs-nav { overflow-x: auto; width: 100%; border-radius: var(--radius-sm); }
         }
     </style>
 </head>
-
 <body>
 
-    <!-- NAVBAR -->
-    <nav class="navbar glass-panel container" style="margin-top: 20px;">
-        <div class="logo" style="cursor:pointer;" onclick="window.location.href='index.html'">
-            <i class="fas fa-graduation-cap"></i> ScholarEase <span
-                style="font-weight:400; opacity:0.7">Dashboard</span>
+<!-- NAVBAR -->
+<nav class="navbar">
+    <a class="nav-logo" href="index.html">
+        <i class="fas fa-graduation-cap"></i> ScholarEase
+    </a>
+    <div class="nav-right">
+        <a class="nav-link" href="index.html">
+            <i class="fas fa-search"></i> Browse Scholarships
+        </a>
+        <button class="nav-link danger" onclick="handleLogout()">
+            <i class="fas fa-sign-out-alt"></i> Logout
+        </button>
+    </div>
+</nav>
+
+<!-- MAIN -->
+<div class="page-wrapper">
+
+    <!-- PROFILE HERO -->
+    <div class="profile-hero" id="profile-hero">
+        <div class="avatar" id="user-avatar">?</div>
+        <div class="profile-info">
+            <h2 id="hero-name">Loading...</h2>
+            <p class="email" id="hero-email">—</p>
+            <div class="profile-badges" id="hero-badges">
+                <!-- populated by JS -->
+            </div>
         </div>
-        <div style="display:flex; gap: 20px; align-items: center;">
-            <button id="logout-btn" class="btn btn-primary"
-                style="padding: 8px 16px; font-size: 0.9em; background: rgba(255,50,50,0.2); border: 1px solid rgba(255,50,50,0.5); color: white;"
-                onclick="handleLogout()">
-                <i class="fas fa-sign-out-alt"></i> Logout
+        <div class="profile-hero-actions">
+            <div class="profile-complete-pill pill-incomplete" id="profile-status-pill">
+                <i class="fas fa-circle-exclamation"></i> Profile Incomplete
+            </div>
+            <button class="btn btn-accent" onclick="switchTab('profile')" id="complete-cta">
+                <i class="fas fa-user-edit"></i> Edit Profile
             </button>
         </div>
-    </nav>
+    </div>
 
-    <!-- MAIN CONTENT -->
-    <main class="container dashboard-container">
+    <!-- TAB NAVIGATION -->
+    <div class="tabs-nav">
+        <button class="tab-pill active" id="tab-btn-recommendations" onclick="switchTab('recommendations')">
+            <i class="fas fa-stars"></i> Recommendations
+        </button>
+        <button class="tab-pill" id="tab-btn-profile" onclick="switchTab('profile')">
+            <i class="fas fa-user-edit"></i> My Profile
+        </button>
+        <button class="tab-pill" id="tab-btn-saved" onclick="switchTab('saved')">
+            <i class="fas fa-bookmark"></i> Saved
+        </button>
+    </div>
 
-        <!-- PROFILE SIDER (Left) -->
-        <aside class="profile-panel">
-            <h3 class="sidebar-title"><i class="fas fa-user-edit"></i> My Profile</h3>
-
-            <form id="profile-form" onsubmit="saveProfile(event)">
-                <div class="filter-group">
-                    <label>Category (Caste)</label>
-                    <select id="user-category" class="filter-select">
-                        <option value="General">General</option>
-                        <option value="OBC">OBC</option>
-                        <option value="SC/ST">SC / ST</option>
-                    </select>
-                </div>
-
-                <div class="filter-group">
-                    <label>Education Level</label>
-                    <select id="user-education" class="filter-select">
-                        <option value="Class 10">Class 10</option>
-                        <option value="Class 12">Class 12</option>
-                        <option value="Undergraduate">Undergraduate</option>
-                        <option value="Postgraduate">Postgraduate</option>
-                        <option value="Diploma">Diploma/Polytechnic</option>
-                    </select>
-                </div>
-
-                <div class="filter-group">
-                    <label>Course/Stream</label>
-                    <select id="user-stream" class="filter-select">
-                        <option value="All">General / Any</option>
-                        <option value="Engineering">Engineering (B.Tech/B.E)</option>
-                        <option value="Medical">Medical (MBBS/BDS)</option>
-                        <option value="Science">B.Sc / Science</option>
-                        <option value="Commerce">Commerce</option>
-                        <option value="Arts">Arts</option>
-                    </select>
-                </div>
-
-                <div class="filter-group">
-                    <label>Year of Study</label>
-                    <select id="user-year" class="filter-select">
-                        <option value="1">1st Year</option>
-                        <option value="2">2nd Year</option>
-                        <option value="3">3rd Year</option>
-                        <option value="4">4th Year</option>
-                        <option value="Any">School / Unspecified</option>
-                    </select>
-                </div>
-
-                <div class="filter-group">
-                    <label>Family Income (Annual ₹)</label>
-                    <input type="number" id="user-income" class="filter-select" placeholder="e.g. 250000" min="0">
-                </div>
-
-                <div class="filter-group">
-                    <label>State</label>
-                    <select id="user-state" class="filter-select">
-                        <option value="All India">All India</option>
-                        <option value="Maharashtra">Maharashtra</option>
-                        <option value="Delhi">Delhi</option>
-                        <option value="Karnataka">Karnataka</option>
-                        <!-- Add more states dynamically if needed -->
-                    </select>
-                </div>
-
-                <div class="filter-group">
-                    <label>Gender</label>
-                    <select id="user-gender" class="filter-select">
-                        <option value="Male">Male</option>
-                        <option value="Female">Female</option>
-                        <option value="Other">Other</option>
-                    </select>
-                </div>
-
-                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 15px;"
-                    id="save-profile-btn">
-                    Save Profile
-                </button>
-            </form>
-        </aside>
-
-        <!-- DASHBOARD CONTENT (Right) -->
-        <div class="dash-content">
-            <div style="border-bottom: 1px solid var(--glass-border); margin-bottom: 20px; display:flex; gap:10px;">
-                <button class="tab-btn-dash active" onclick="switchTab('recommendations', this)">
-                    <i class="fas fa-sparkles"></i> Recommended For You
-                </button>
-                <button class="tab-btn-dash" onclick="switchTab('saved', this)">
-                    <i class="fas fa-bookmark"></i> Saved Scholarships
-                </button>
+    <!-- TAB: RECOMMENDATIONS -->
+    <div class="tab-panel active" id="panel-recommendations">
+        <div class="rec-header">
+            <div class="section-title">
+                <i class="fas fa-sparkles"></i> Personalized For You
             </div>
-
-            <!-- Recommendations Grid -->
-            <div id="tab-recommendations" class="grid"
-                style="grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));">
-                <!-- Data populated here -->
-                <p>Loading recommendations...</p>
+            <div class="rec-meta">
+                Matched to your profile &nbsp; <span class="count-badge" id="rec-count">—</span>
             </div>
+        </div>
+        <div id="rec-grid" class="rec-grid">
+            <div class="loading-pulse"><div class="spinner"></div> Finding your matches...</div>
+        </div>
+    </div>
 
-            <!-- Saved Grid -->
-            <div id="tab-saved" class="grid"
-                style="display:none; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));">
-                <!-- Data populated here -->
-                <p>You haven't saved any scholarships yet.</p>
+    <!-- TAB: MY PROFILE -->
+    <div class="tab-panel" id="panel-profile">
+        <div class="section-header">
+            <div class="section-title"><i class="fas fa-user-circle"></i> Personal Information</div>
+            <div class="edit-actions">
+                <button class="btn btn-ghost" id="cancel-btn" onclick="cancelEdit()" style="display:none;">
+                    <i class="fas fa-xmark"></i> Cancel
+                </button>
+                <button class="btn btn-accent" id="edit-save-btn" onclick="toggleEdit()">
+                    <i class="fas fa-pen" id="edit-save-icon"></i> <span id="edit-save-label">Edit Profile</span>
+                </button>
             </div>
         </div>
 
-    </main>
+        <div class="profile-grid">
+            <!-- Category -->
+            <div class="form-card">
+                <label><i class="fas fa-users"></i> Category (Caste)</label>
+                <div class="form-display" id="disp-category">—</div>
+                <select class="form-select editor" id="edit-category" style="display:none;" disabled>
+                    <option value="General">General</option>
+                    <option value="OBC">OBC</option>
+                    <option value="SC">SC</option>
+                    <option value="ST">ST</option>
+                    <option value="SC/ST">SC / ST</option>
+                </select>
+            </div>
+            <!-- Education Level -->
+            <div class="form-card">
+                <label><i class="fas fa-book-open"></i> Education Level</label>
+                <div class="form-display" id="disp-education">—</div>
+                <select class="form-select editor" id="edit-education" style="display:none;" disabled>
+                    <option value="Class 10">Class 10</option>
+                    <option value="Class 12">Class 12</option>
+                    <option value="Undergraduate">Undergraduate (UG)</option>
+                    <option value="Postgraduate">Postgraduate (PG)</option>
+                    <option value="Diploma">Diploma / Polytechnic</option>
+                    <option value="PhD">PhD / Research</option>
+                </select>
+            </div>
+            <!-- Stream -->
+            <div class="form-card">
+                <label><i class="fas fa-flask"></i> Course / Stream</label>
+                <div class="form-display" id="disp-stream">—</div>
+                <select class="form-select editor" id="edit-stream" style="display:none;" disabled>
+                    <option value="All">General / Any</option>
+                    <option value="Engineering">Engineering (B.Tech / B.E)</option>
+                    <option value="Medical">Medical (MBBS / BDS)</option>
+                    <option value="Science">B.Sc / Science</option>
+                    <option value="Commerce">Commerce / B.Com</option>
+                    <option value="Arts">Arts / Humanities</option>
+                    <option value="Law">Law (LLB)</option>
+                    <option value="Management">Management (MBA)</option>
+                </select>
+            </div>
+            <!-- Year of Study -->
+            <div class="form-card">
+                <label><i class="fas fa-calendar-days"></i> Year of Study</label>
+                <div class="form-display" id="disp-year">—</div>
+                <select class="form-select editor" id="edit-year" style="display:none;" disabled>
+                    <option value="1">1st Year</option>
+                    <option value="2">2nd Year</option>
+                    <option value="3">3rd Year</option>
+                    <option value="4">4th Year</option>
+                    <option value="Any">School / Unspecified</option>
+                </select>
+            </div>
+            <!-- Income -->
+            <div class="form-card">
+                <label><i class="fas fa-indian-rupee-sign"></i> Annual Family Income (₹)</label>
+                <div class="form-display" id="disp-income">—</div>
+                <input type="number" class="form-input editor" id="edit-income" placeholder="e.g. 250000" min="0" style="display:none;" disabled>
+            </div>
+            <!-- State -->
+            <div class="form-card">
+                <label><i class="fas fa-location-dot"></i> State</label>
+                <div class="form-display" id="disp-state">—</div>
+                <select class="form-select editor" id="edit-state" style="display:none;" disabled>
+                    <option value="All India">All India</option>
+                    <option value="Andhra Pradesh">Andhra Pradesh</option>
+                    <option value="Assam">Assam</option>
+                    <option value="Bihar">Bihar</option>
+                    <option value="Chhattisgarh">Chhattisgarh</option>
+                    <option value="Delhi">Delhi</option>
+                    <option value="Goa">Goa</option>
+                    <option value="Gujarat">Gujarat</option>
+                    <option value="Haryana">Haryana</option>
+                    <option value="Himachal Pradesh">Himachal Pradesh</option>
+                    <option value="Jharkhand">Jharkhand</option>
+                    <option value="Karnataka">Karnataka</option>
+                    <option value="Kerala">Kerala</option>
+                    <option value="Madhya Pradesh">Madhya Pradesh</option>
+                    <option value="Maharashtra">Maharashtra</option>
+                    <option value="Manipur">Manipur</option>
+                    <option value="Meghalaya">Meghalaya</option>
+                    <option value="Odisha">Odisha</option>
+                    <option value="Punjab">Punjab</option>
+                    <option value="Rajasthan">Rajasthan</option>
+                    <option value="Tamil Nadu">Tamil Nadu</option>
+                    <option value="Telangana">Telangana</option>
+                    <option value="Uttar Pradesh">Uttar Pradesh</option>
+                    <option value="Uttarakhand">Uttarakhand</option>
+                    <option value="West Bengal">West Bengal</option>
+                </select>
+            </div>
+            <!-- Gender -->
+            <div class="form-card">
+                <label><i class="fas fa-person"></i> Gender</label>
+                <div class="form-display" id="disp-gender">—</div>
+                <select class="form-select editor" id="edit-gender" style="display:none;" disabled>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            <!-- CGPA -->
+            <div class="form-card">
+                <label><i class="fas fa-award"></i> CGPA / Percentage</label>
+                <div class="form-display" id="disp-cgpa">—</div>
+                <input type="number" class="form-input editor" id="edit-cgpa" placeholder="e.g. 8.5 or 85" step="0.01" min="0" max="100" style="display:none;" disabled>
+            </div>
+        </div>
 
-    <script src="js/dashboard.js"></script>
+        <!-- Save notice -->
+        <p style="font-size:0.82rem; color: var(--text-muted); margin-bottom: 18px; display: flex; gap: 6px; align-items: center;">
+            <i class="fas fa-circle-info" style="color:var(--accent);"></i>
+            Saving your profile will immediately update your scholarship recommendations.
+        </p>
+
+    </div>
+
+    <!-- TAB: SAVED -->
+    <div class="tab-panel" id="panel-saved">
+        <div class="section-header">
+            <div class="section-title"><i class="fas fa-bookmark"></i> Saved Scholarships</div>
+        </div>
+        <div id="saved-grid" class="saved-grid">
+            <div class="loading-pulse"><div class="spinner"></div> Loading...</div>
+        </div>
+    </div>
+
+</div>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<script src="js/dashboard.js"></script>
 </body>
-
 </html>
